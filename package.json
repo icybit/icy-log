@@ -1,0 +1,43 @@
+{
+  "name": "error-handler",
+  "version": "0.1.0",
+  "description": "Simple error handling middleware for the Express framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:giesir/error-handler.git"
+  },
+  "keywords": [
+    "express",
+    "nodejs",
+    "error",
+    "handler",
+    "ws",
+    "http"
+  ],
+  "author": {
+    "name": "Giedrius Sirevicius",
+    "email": "giedriussir@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/giesir/error-handler/issues"
+  },
+  "files": [
+    "LICENSE.md",
+    "README.md",
+    "index.js"
+  ],
+  "dependencies": {
+    "async": "^1.5.0",
+    "debug": "^2.2.0"
+  },
+  "devDependencies": {
+    "express": "^4.13.3",
+    "supertest": "^1.1.0",
+    "tape": "^4.2.2"
+  }
+}
