@@ -1,4 +1,6 @@
-﻿var test = require('tape'),
+﻿'use strict';
+
+var test = require('tape'),
     express = require('express'),
     request = require('supertest'),
     icylog = require('../index');
@@ -117,7 +119,7 @@ test('Should refuse to invoke httpHandler', function (t) {
         .expect(500)
         .end(function (err, res) {
             t.error(err, 'should not exist');
-            t.equal(res.body.message.substring(0, 23), "An unexpected exception", 'should match');
+            t.equal(res.body.message.substring(0, 23), 'An unexpected exception', 'should match');
             t.end();
         });
 });
@@ -219,7 +221,7 @@ test('Should refuse to invoke wsHandler', function (t) {
     error.status = 200;
 
     errorHandler(error, function (err, payload) {
-        t.equal(err.message.substring(0, 23), "An unexpected exception", 'should match');
+        t.equal(err.message.substring(0, 23), 'An unexpected exception', 'should match');
         t.end();
     });
 });

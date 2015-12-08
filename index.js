@@ -26,15 +26,15 @@ function icylog(opts) {
 
             if (err) {
                 return next(unexpectedHandler(err));
-            } else {
-                error = results[0];
-                handler = results[1];
-                payload = results[2];
-
-                handler(error, function () {
-                    handleHttpResponse(error, req, res, payload);
-                });
             }
+			
+            error = results[0];
+            handler = results[1];
+            payload = results[2];
+
+            handler(error, function () {
+                handleHttpResponse(error, req, res, payload);
+            });
         });
 
         function handleHttpResponse(err, req, res, payload) {
@@ -101,7 +101,7 @@ function icylog(opts) {
                     debug('Failed to elect handler');
                     return callback(new Error('The HTTP Status Code is neither 4xx or 5xx. Refusing to treat as Error'));
                 }
-            };
+            }
 
             function clientHandler(err, callback) {
                 debug('Invoking Client handler');
@@ -161,15 +161,15 @@ function icylog(opts) {
 
             if (err) {
                 return callback(unexpectedHandler(err));
-            } else {
-                error = results[0];
-                handler = results[1];
-                payload = results[2];
-
-                handler(error, function () {
-                    handleWsResponse(payload, callback);
-                });
             }
+			
+            error = results[0];
+            handler = results[1];
+            payload = results[2];
+
+            handler(error, function () {
+                handleWsResponse(payload, callback);
+            });
         });
 
         function handleWsResponse(payload, callback) {
