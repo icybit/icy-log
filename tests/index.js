@@ -38,7 +38,24 @@ test('Should respect specified options', function (t) {
         });
 });
 
-test('Should ensure error object', function (t) {
+test('Should set specified error name', function (t) {
+    var app = createApp(new Error('Some error'), {
+        errName: 'SomeError'
+    });
+
+    request(app)
+        .get('/')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /application\/json/)
+        .expect(500)
+        .end(function (err, res) {
+            t.error(err, 'should not exist');
+            t.equal(res.body.error.name, 'SomeError', 'should match');
+            t.end();
+        });
+});
+
+test('Should convert string to ExecutionError object', function (t) {
     var error = 'Not an error object',
         app = createApp(error);
 
@@ -51,6 +68,58 @@ test('Should ensure error object', function (t) {
             t.error(err, 'should not exist');
             t.equal(typeof res.body.error, 'object', 'should match');
             t.equal(res.body.message, error, 'should match');
+            t.end();
+        });
+});
+
+test('Should convert object to ExecutionError object', function (t) {
+    var error = { message: 'Some error', status: 500 },
+        app = createApp(error);
+
+    request(app)
+        .get('/')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /application\/json/)
+        .expect(error.status)
+        .end(function (err, res) {
+            t.error(err, 'should not exist');
+            t.equal(typeof res.body.error, 'object', 'should match');
+            t.equal(res.body.message, error.message, 'should match');
+            t.end();
+        });
+});
+
+test('Should convert Error to ExecutionError object', function (t) {
+    var error = new Error('Some error'),
+        app = createApp(error);
+
+    request(app)
+        .get('/')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /application\/json/)
+        .expect(500)
+        .end(function (err, res) {
+            t.error(err, 'should not exist');
+            t.equal(typeof res.body.error, 'object', 'should match');
+            t.equal(res.body.message, error.message, 'should match');
+            t.end();
+        });
+});
+
+test('Should retain ExecutionError object', function (t) {
+    var error = new icylog().ExecutionError('Some error'),
+        app = createApp(error);
+
+    request(app)
+        .get('/')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /application\/json/)
+        .expect(500)
+        .end(function (err, res) {
+            t.error(err, 'should not exist');
+            t.equal(typeof res.body.error, 'object', 'should match');
+            t.deepEqual(res.body.error, error, 'should match');
+            t.equal(res.body.message, error.message, 'should match');
             t.end();
         });
 });
@@ -128,13 +197,13 @@ test('Should create payload', function (t) {
     var error = new Error('Some error'),
         app = createApp(error);
 
-    error.code = 404;
+    error.status = 404;
 
     request(app)
         .get('/')
         .set('Accept', 'application/json')
         .expect('Content-Type', /application\/json/)
-        .expect(error.code)
+        .expect(error.status)
         .end(function (err, res) {
             t.error(err, 'should not exist');
             t.false(res.body.success, 'should be false');
@@ -145,6 +214,7 @@ test('Should create payload', function (t) {
 
 test('Should return plain text via JSON.stringify', function (t) {
     var error = new Error('Some error'),
+        executionError = new icylog().ExecutionError(error, 404),
         app = createApp(error);
 
     error.status = 404;
@@ -155,14 +225,13 @@ test('Should return plain text via JSON.stringify', function (t) {
         .expect('Content-Type', /text\/plain/)
         .expect(error.status)
         .end(function (err, res) {
-            var json = JSON.parse(res.text),
-                errorObj = JSON.parse(JSON.stringify(error));
+            var json = JSON.parse(res.text);
 
             t.error(err, 'should not exist');
             t.equal(typeof res.text, 'string', 'should match');
             t.false(json.success, 'should be false');
             t.equal(json.message, error.message, 'should match');
-            t.deepEqual(json.error, errorObj, 'should match');
+            t.deepEqual(json.error, executionError, 'should match');
             t.end();
         });
 });
@@ -201,15 +270,15 @@ test('Should set nosniff header', function (t) {
 });
 
 test('Should invoke wsHandler', function (t) {
-    var error = new Error('Some error'),
-        errorHandler = icylog().ws;
+    var handler = icylog(),
+        error = new Error('Some error'),
+        executionError = new handler.ExecutionError(error);
 
-    errorHandler(error, function (err, payload) {
+    handler.ws(error, function (err, payload) {
         t.error(err, 'should not exist');
         t.false(payload.success, 'should be false');
         t.equal(payload.message, error.message, 'should match');
-        t.equal(payload.error, error, 'should match');
-        t.equal(payload.error.status, 500, 'should match');
+        t.deepEqual(payload.error, executionError, 'should match');
         t.end();
     });
 });
