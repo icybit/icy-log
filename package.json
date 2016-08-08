@@ -1,6 +1,6 @@
 {
   "name": "icylog",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Simple error handling middleware for the Express framework",
   "main": "index.js",
   "scripts": {
