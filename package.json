@@ -29,7 +29,8 @@
   "files": [
     "LICENSE.md",
     "README.md",
-    "index.js"
+    "index.js",
+    "lib"
   ],
   "dependencies": {
     "async": "^2.0.1",
