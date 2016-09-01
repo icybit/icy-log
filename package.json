@@ -34,7 +34,8 @@
   ],
   "dependencies": {
     "async": "^2.0.1",
-    "debug": "^2.2.0"
+    "debug": "^2.2.0",
+    "icy-error": "^0.1.0"
   },
   "devDependencies": {
     "express": "^4.14.0",
