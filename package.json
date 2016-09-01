@@ -1,6 +1,6 @@
 {
-  "name": "icylog",
-  "version": "0.2.0",
+  "name": "icy-log",
+  "version": "0.3.0",
   "description": "Simple error handling middleware for the Express framework",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:giesir/error-handler.git"
+    "url": "git+https://github.com/icybit/icy-log.git"
   },
   "keywords": [
     "express",
@@ -18,14 +18,12 @@
     "ws",
     "http"
   ],
-  "author": {
-    "name": "Giedrius Sirevicius",
-    "email": "giedriussir@gmail.com"
-  },
+  "author": "Giedrius Sirevicius <giedrius@icybit.co>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/giesir/error-handler/issues"
+    "url": "https://github.com/icybit/icy-log/issues"
   },
+  "homepage": "https://github.com/icybit/icy-log#readme",
   "files": [
     "LICENSE.md",
     "README.md",
